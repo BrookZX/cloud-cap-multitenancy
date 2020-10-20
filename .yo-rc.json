@@ -26,6 +26,21 @@
     "reg_res_name": "capmt-reg",
     "reg_svc_name": "CAPMT_REG",
     "mgd_res_name": "capmt-smc",
-    "mgd_svc_name": "CAPMT_SMC"
+    "mgd_svc_name": "CAPMT_SMC",
+    "module_names": [
+      "capmt-prov"
+    ],
+    "module_paths": [
+      "prov"
+    ],
+    "module_apis": [
+      "capmt_prov_api"
+    ],
+    "module_bes": [
+      "capmt_prov_be"
+    ],
+    "module_routes": [
+      "prov"
+    ]
   }
 }

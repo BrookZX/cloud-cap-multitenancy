@@ -2,6 +2,7 @@
 echo ""
 echo "Run these commands after a full deploy."
 echo ""
+set -o allexport; source .env; set +o allexport
 cf set-env capmt-srv CF_API_USER 'user@domain.com'
 cf set-env capmt-srv CF_API_PW 'YourPassword'
 cf restage capmt-srv

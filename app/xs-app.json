@@ -7,6 +7,26 @@
   "routes": [
     {
       "source": "(mtx/v1/provisioning/tenant/)(.*)",
+      "destination": "capmt_prov_be",
+      "httpMethods": ["GET", "PUT", "DELETE"],
+      "csrfProtection": true,
+      "authenticationType": "none"
+    },
+    {
+      "source": "(srv/)(.*)",
+      "destination": "capmt_prov_be",
+      "csrfProtection": true,
+      "authenticationType": "xsuaa"
+    },
+    {
+      "source": "(prov/)(.*)",
+      "destination": "capmt_prov_be",
+      "csrfProtection": true,
+      "authenticationType": "xsuaa",
+      "scope": "$XSAPPNAME.Provisioner"
+    },
+    {
+      "source": "(mtx/v1/provisioning/tenant/)(.*)",
       "destination": "capmt_svc_be",
       "httpMethods": ["GET", "PUT", "DELETE"],
       "csrfProtection": true,
@@ -31,4 +51,5 @@
     }
   ]
 }
+
 

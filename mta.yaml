@@ -21,6 +21,25 @@ modules:
 
 ### New Modules Here ###
 
+# cf push capmt-prov -p prov -n capmt-prov -d cfapps.us10.hana.ondemand.com -k 512M -m 256M
+ - name: capmt-prov
+   type: nodejs
+   path: prov
+   build-parameters:
+      ignore: ["node_modules/"]
+   parameters:
+      memory: 256M
+      disk-quota: 512M
+      #host: ${org}-${space}-capmt-prov
+      #domain: cfapps.us10.hana.ondemand.com
+   provides:
+    - name: capmt_prov_api
+      properties:
+         url: ${default-url}
+   requires:
+    - name: capmt-uaa
+    - name: capmt-hdi
+
 # cf push capmt-hdb -p db -k 512M -m 512M
  - name: capmt-hdb
    type: hdb
@@ -48,10 +67,10 @@ modules:
       commands: []
    path: srv
    properties:
-      LOG_LEVEL: debug
+      #LOG_LEVEL: debug
       EXIT: 1  # required by deploy.js task to terminate
       SAP_JWT_TRUST_ACL: [{"clientid":"*","identityzone":"sap-provisioning"}]  # Trust between server and SaaS Manager
-      NODE_DEBUG: 'instance-manager'
+      #NODE_DEBUG: 'instance-manager'
       # cf set-env capmt-srv CF_API_USER $CF_API_USER
       # cf set-env capmt-srv CF_API_PW $CF_API_PW
       # cf restage capmt-srv
@@ -102,6 +121,12 @@ modules:
    # cf bind-service capmt-app CAPMT_UAA
     - name: capmt-uaa
    ### New Destinations Here ###
+    - name: capmt_prov_api
+      group: destinations
+      properties:
+         name: capmt_prov_be
+         url: ~{url}
+         forwardAuthToken: true
     - name: capmt_svc_api
       group: destinations
       properties:
@@ -146,6 +171,8 @@ resources:
              - "$XSAPPNAME(application,sap-provisioning,tenant-onboarding)"
           - name: "$XSAPPNAME.Administrator"
             description: Administrate the application
+          - name: "$XSAPPNAME.Provisioner"
+            description: Provision new customers
           - name: "$XSAPPNAME.User"
             description: Use the application
          role-templates:
@@ -153,6 +180,10 @@ resources:
             description: Administrator
             scope-references:
              - "$XSAPPNAME.Administrator"
+          - name: Provisioner
+            description: Provisioner
+            scope-references:
+             - "$XSAPPNAME.Provisioner"
           - name: User
             description: User Required
             scope-references:
@@ -207,6 +238,7 @@ resources:
             onSubscriptionAsync: false
             onUnSubscriptionAsync: false
             #callbackTimeoutMillis: 300000
+
 
 
 

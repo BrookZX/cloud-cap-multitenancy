@@ -1,4 +1,5 @@
-using { my.bookshop, sap.common } from '../db/data-model';
+using { my.bookshop, sap.common } from '../db/sub-model';
+using { com.cont } from '../db/com-model';
 
 service CatalogService {
   entity Books @readonly as projection on bookshop.Books;
