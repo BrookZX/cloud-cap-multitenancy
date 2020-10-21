@@ -43,7 +43,7 @@ modules:
 # cf push capmt-hdb -p db -k 512M -m 512M
  - name: capmt-hdb
    type: hdb
-   path: db
+   path: db-com
    build-parameters:
       # Don't package the dependencies if you're running into EINTEGRITY issues
       ignore: ["default-env.json", "node_modules/"]

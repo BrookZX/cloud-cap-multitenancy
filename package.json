@@ -6,9 +6,9 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "@sap/cds": "^4",
-    "express": "^4",
-    "@sap/hana-client": "^2.4.177"
+    "@sap/cds": "^4.2.4",
+    "@sap/hana-client": "^2.4.177",
+    "express": "^4"
   },
   "devDependencies": {
     "sqlite3": "^4"
@@ -25,7 +25,7 @@
       "db": {
         "kind": "hana",
         "model": [
-          "db",
+          "db-com",
           "srv"
         ]
       }
@@ -35,10 +35,10 @@
       "tasks": [
         {
           "for": "hana",
-          "src": "db",
+          "src": "db-com",
           "options": {
             "model": [
-              "db",
+              "db-com",
               "srv"
             ]
           }
@@ -48,7 +48,7 @@
           "src": "srv",
           "options": {
             "model": [
-              "db",
+              "db-com",
               "srv"
             ]
           }
@@ -58,15 +58,21 @@
           "src": "srv",
           "options": {
             "model": [
-              "db",
+              "db-com",
               "srv"
             ]
           }
         },
         {
           "for": "mtx",
-          "src": ".",
-          "dest": "srv"
+          "src": "srv",
+          "dest": "srv",
+          "options": {
+            "model": [
+              "db-sub",
+              "srv"
+            ]
+          }
         }
       ]
     },
@@ -101,7 +107,8 @@
   },
   "files": [
     "app",
-    "db",
+    "db-com",
+    "db-sub",
     "handlers",
     "integration-tests",
     "srv",

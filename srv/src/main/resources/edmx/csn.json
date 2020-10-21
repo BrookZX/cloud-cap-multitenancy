@@ -1,5 +1,5 @@
 {
-  "namespace": "my.bookshop",
+  "namespace": "com.cont",
   "definitions": {
     "CatalogService": {
       "@source": "srv/cat-service.cds",
@@ -524,6 +524,96 @@
       "@Core.Description": "{i18n>UserID.Description}",
       "@Common.Label": "{i18n>UserID}"
     },
+    "com.cont.Stuff": {
+      "kind": "entity",
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "title": {
+          "localized": true,
+          "type": "cds.String"
+        },
+        "stock": {
+          "type": "cds.Integer"
+        },
+        "texts": {
+          "type": "cds.Composition",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "com.cont.Stuff_texts",
+          "on": [
+            {
+              "ref": [
+                "texts",
+                "ID"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "ID"
+              ]
+            }
+          ]
+        },
+        "localized": {
+          "type": "cds.Association",
+          "target": "com.cont.Stuff_texts",
+          "on": [
+            {
+              "ref": [
+                "localized",
+                "ID"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "ID"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "localized",
+                "locale"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$user",
+                "locale"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "com.cont.Stuff_texts": {
+      "kind": "entity",
+      "@cds.autoexpose": true,
+      "@odata.draft.enabled": false,
+      "elements": {
+        "locale": {
+          "key": true,
+          "type": "cds.String",
+          "length": 14
+        },
+        "ID": {
+          "@odata.containment.ignore": true,
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "title": {
+          "localized": false,
+          "type": "cds.String"
+        }
+      }
+    },
     "cuid": {
       "kind": "type",
       "elements": {
@@ -897,6 +987,109 @@
           "@odata.foreignKey4": "country",
           "@Core.Description": "{i18n>CountryCode.Description}",
           "@Common.Label": "{i18n>Country}"
+        }
+      }
+    },
+    "localized.com.cont.Stuff": {
+      "kind": "entity",
+      "@odata.draft.enabled": false,
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "com.cont.Stuff"
+            ],
+            "as": "L"
+          },
+          "columns": [
+            "*",
+            {
+              "func": "coalesce",
+              "args": [
+                {
+                  "ref": [
+                    "L",
+                    "localized",
+                    "title"
+                  ]
+                },
+                {
+                  "ref": [
+                    "L",
+                    "title"
+                  ]
+                }
+              ],
+              "as": "title"
+            }
+          ]
+        }
+      },
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "title": {
+          "@Core.Computed": true,
+          "localized": true,
+          "type": "cds.String"
+        },
+        "stock": {
+          "type": "cds.Integer"
+        },
+        "texts": {
+          "type": "cds.Composition",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "com.cont.Stuff_texts",
+          "on": [
+            {
+              "ref": [
+                "texts",
+                "ID"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "ID"
+              ]
+            }
+          ]
+        },
+        "localized": {
+          "type": "cds.Association",
+          "target": "com.cont.Stuff_texts",
+          "on": [
+            {
+              "ref": [
+                "localized",
+                "ID"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "ID"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "localized",
+                "locale"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$user",
+                "locale"
+              ]
+            }
+          ]
         }
       }
     },
